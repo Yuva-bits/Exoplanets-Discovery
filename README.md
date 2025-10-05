@@ -9,7 +9,7 @@ A machine learning platform that automatically identifies exoplanets from astron
 **Challenge**: A World Away: Hunting for Exoplanets with AI  
 **Summary**: Data from several different space-based exoplanet surveying missions have enabled discovery of thousands of new planets outside our solar system, but most of these exoplanets were identified manually. With advances in artificial intelligence and machine learning (AI/ML), it is possible to automatically analyze large sets of data collected by these missions to identify exoplanets.
 
-**Our Solution**: A comprehensive hierarchical ensemble system that combines XGBoost, Random Forest, and Neural Networks to achieve state-of-the-art exoplanet detection with 91.89% accuracy.
+**Our Solution**: A comprehensive hierarchical ensemble system that combines XGBoost, Random Forest, and Neural Networks to achieve state-of-the-art exoplanet detection.
 
 ## Features
 
