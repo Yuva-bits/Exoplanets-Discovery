@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Batch Analysis - Exoplanet Detection Platform{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<div class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-black dark:to-gray-800 py-16">
+    <div class="absolute inset-0">
+        <div class="absolute top-10 right-10 w-96 h-96 bg-blue-400/10 dark:bg-blue-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-bounce-subtle"></div>
+        <div class="absolute bottom-10 left-10 w-96 h-96 bg-gray-400/10 dark:bg-gray-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-bounce-subtle delay-500"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-400/5 dark:bg-blue-500/15 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <div class="inline-flex items-center px-4 py-2 bg-blue-100/90 dark:bg-gray-800/80 backdrop-blur-sm rounded-full mb-6 border border-blue-200/50 dark:border-gray-600/50">
+                <i class="fas fa-upload text-blue-600 dark:text-blue-400 mr-2"></i>
+                <span class="text-sm font-medium text-blue-800 dark:text-gray-200">Bulk Processing</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                Batch Exoplanet Analysis
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                Process multiple candidates simultaneously by uploading CSV files with our high-performance processing pipeline
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {% if not models_loaded %}
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8 transition-colors duration-300">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 text-xl mr-3 transition-colors duration-300"></i>
+            <div>
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 transition-colors duration-300">Models Not Loaded</h3>
+                <p class="text-red-700 dark:text-red-300 transition-colors duration-300">Please check model files and restart the application</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Upload Section -->
+    <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 mb-8 border border-gray-200/50 dark:border-gray-600/50">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4">
+                <i class="fas fa-cloud-upload-alt text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Upload CSV File</h2>
+        </div>
+        
+        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors duration-300">
+            <div id="drop-zone" class="cursor-pointer">
+                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-4"></i>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Drop your CSV file here</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">or click to browse</p>
+                <input type="file" id="file-input" accept=".csv" class="hidden">
+                <button class="btn-secondary">
+                    <i class="fas fa-folder-open mr-2"></i>Choose File
+                </button>
+            </div>
+            
+            <div id="file-info" class="hidden mt-4">
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-file-csv text-green-600 dark:text-green-400"></i>
+                    <span id="file-name" class="font-medium text-gray-900 dark:text-white"></span>
+                    <button id="remove-file" class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Required Columns</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">orbital_period</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">planetary_radius</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">transit_depth</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">transit_duration</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">impact_parameter</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">stellar_temperature</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">stellar_radius</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">stellar_gravity</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">equilibrium_temp</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">insolation</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">planetary_mass</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">semi_major_axis</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">orbital_eccentricity</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">stellar_mass</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">stellar_metallicity</span>
+                <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">system_distance</span>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <button id="analyze-btn" class="btn-primary" disabled {% if not models_loaded %}disabled{% endif %}>
+                <i class="fas fa-search mr-2"></i>Analyze Batch
+            </button>
+        </div>
+    </div>
+
+    <!-- Sample Data Preview -->
+    <div id="sample-preview" class="hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8 transition-colors duration-300">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Sample Data Preview</h2>
+            <div id="sample-table" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8 transition-colors duration-300">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Batch Analysis Results</h2>
+            
+            <!-- Summary Statistics -->
+            <div id="summary-stats" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"></div>
+            
+            <!-- Results Table -->
+            <div id="results-table" class="overflow-x-auto mb-6"></div>
+            
+            <!-- Download Button -->
+            <div class="text-center">
+                <button id="download-results" class="btn-secondary">
+                    <i class="fas fa-download mr-2"></i>Download Results
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progress-modal" class="fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-75 hidden items-center justify-center z-50 transition-colors duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 max-w-md w-full mx-4 transition-colors duration-300">
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
+                    <i class="fas fa-cog fa-spin text-2xl text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Processing Data</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-6">Analyzing exoplanet candidates...</p>
+                
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+                    <div id="progress-bar" class="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                
+                <p id="progress-text" class="text-sm text-gray-600 dark:text-gray-300">0% complete</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/batch.js') }}"></script>
+{% endblock %}

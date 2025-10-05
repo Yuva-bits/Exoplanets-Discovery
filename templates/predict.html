@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}Single Prediction - Exoplanet Detection Platform{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<div class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-black dark:to-gray-800 py-16">
+    <div class="absolute inset-0">
+        <div class="absolute top-10 left-10 w-72 h-72 bg-blue-400/10 dark:bg-blue-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse"></div>
+        <div class="absolute top-40 right-10 w-72 h-72 bg-gray-400/10 dark:bg-gray-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse delay-1000"></div>
+        <div class="absolute bottom-10 left-1/2 w-96 h-96 bg-indigo-400/5 dark:bg-indigo-500/15 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-bounce-subtle"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <div class="inline-flex items-center px-4 py-2 glass-effect dark:glass-effect-dark rounded-full mb-6">
+                <i class="fas fa-search text-blue-600 dark:text-blue-400 mr-2"></i>
+                <span class="text-sm font-medium text-blue-800 dark:text-gray-200">Advanced Analysis</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                Single Exoplanet Prediction
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                Analyze individual exoplanet candidates with detailed confidence scores using our advanced hierarchical ensemble model
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {% if not models_loaded %}
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8 transition-colors duration-300">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 text-xl mr-3 transition-colors duration-300"></i>
+            <div>
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 transition-colors duration-300">Models Not Loaded</h3>
+                <p class="text-red-700 dark:text-red-300 transition-colors duration-300">Please check model files and restart the application</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Input Method Selection -->
+    <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-8 mb-8 border border-gray-200/50 dark:border-gray-600/50">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-4">
+                <i class="fas fa-list text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Input Method</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button id="manual-btn" class="input-method-btn active" data-method="manual">
+                <i class="fas fa-edit text-2xl mb-3 text-gray-600 dark:text-gray-300"></i>
+                <h3 class="font-semibold text-gray-900 dark:text-white">Manual Entry</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Enter parameters manually</p>
+            </button>
+            
+            <button id="template-btn" class="input-method-btn" data-method="template">
+                <i class="fas fa-clipboard-list text-2xl mb-3 text-gray-600 dark:text-gray-300"></i>
+                <h3 class="font-semibold text-gray-900 dark:text-white">Template Form</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Use predefined templates</p>
+            </button>
+            
+            <button id="random-btn" class="input-method-btn" data-method="random">
+                <i class="fas fa-dice text-2xl mb-3 text-gray-600 dark:text-gray-300"></i>
+                <h3 class="font-semibold text-gray-900 dark:text-white">Random Example</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Generate random parameters</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- Manual Input Form -->
+    <div id="manual-form" class="input-form">
+        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 p-8 border border-gray-200/30 dark:border-gray-700/30">
+        <div class="flex items-center mb-8">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-4">
+                <i class="fas fa-edit text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Enter Planetary Parameters</h2>
+        </div>            <form id="prediction-form">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Orbital Parameters -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center transition-colors duration-300">
+                            <i class="fas fa-globe text-blue-600 dark:text-blue-400 mr-2 transition-colors duration-300"></i>
+                            Orbital Parameters
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Orbital Period (days)</label>
+                                <input type="number" name="orbital_period" step="0.01" min="0" max="10000" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Planetary Radius (Earth radii)</label>
+                                <input type="number" name="planetary_radius" step="0.01" min="0" max="50" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Planetary Mass (Earth masses)</label>
+                                <input type="number" name="planetary_mass" step="0.01" min="0" max="1000" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Semi-major Axis (AU)</label>
+                                <input type="number" name="semi_major_axis" step="0.01" min="0" max="100" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Orbital Eccentricity</label>
+                                <input type="number" name="orbital_eccentricity" step="0.01" min="0" max="1" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stellar Parameters -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center transition-colors duration-300">
+                            <i class="fas fa-star text-yellow-500 dark:text-yellow-400 mr-2 transition-colors duration-300"></i>
+                            Stellar Parameters
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Stellar Temperature (K)</label>
+                                <input type="number" name="stellar_temperature" step="1" min="2000" max="10000" value="0" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Stellar Radius (Solar radii)</label>
+                                <input type="number" name="stellar_radius" step="0.01" min="0" max="10" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Stellar Mass (Solar masses)</label>
+                                <input type="number" name="stellar_mass" step="0.01" min="0" max="5" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Stellar Surface Gravity (log g)</label>
+                                <input type="number" name="stellar_gravity" step="0.01" min="0" max="6" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Stellar Metallicity</label>
+                                <input type="number" name="stellar_metallicity" step="0.01" min="-2" max="1" value="0.00" 
+                                       class="form-input" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Transit Parameters -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center transition-colors duration-300">
+                        <i class="fas fa-search text-green-600 dark:text-green-400 mr-2 transition-colors duration-300"></i>
+                        Transit Parameters
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Transit Depth (ppm)</label>
+                            <input type="number" name="transit_depth" step="1" min="0" max="50000" value="0" 
+                                   class="form-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Transit Duration (hours)</label>
+                            <input type="number" name="transit_duration" step="0.01" min="0" max="50" value="0.00" 
+                                   class="form-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Impact Parameter</label>
+                            <input type="number" name="impact_parameter" step="0.01" min="0" max="2" value="0.00" 
+                                   class="form-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Equilibrium Temperature (K)</label>
+                            <input type="number" name="equilibrium_temp" step="1" min="0" max="3000" value="0" 
+                                   class="form-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Insolation (Earth units)</label>
+                            <input type="number" name="insolation" step="0.001" min="0" max="1000" value="0.000" 
+                                   class="form-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">System Distance (pc)</label>
+                            <input type="number" name="system_distance" step="1" min="0" max="1000" value="0" 
+                                   class="form-input" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button type="submit" class="btn-primary" {% if not models_loaded %}disabled{% endif %}>
+                        <i class="fas fa-search mr-2"></i>Predict Exoplanet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Template Form -->
+    <div id="template-form" class="input-form hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Exoplanet Type Templates</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <button class="template-btn" data-template="earth">
+                    <i class="fas fa-globe text-2xl mb-2 text-gray-600 dark:text-gray-300"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Earth-like Planet</h3>
+                </button>
+                
+                <button class="template-btn" data-template="jupiter">
+                    <i class="fas fa-satellite text-2xl mb-2 text-gray-600 dark:text-gray-300"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Gas Giant</h3>
+                </button>
+                
+                <button class="template-btn" data-template="hot_jupiter">
+                    <i class="fas fa-fire text-2xl mb-2 text-gray-600 dark:text-gray-300"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Hot Jupiter</h3>
+                </button>
+            </div>
+            
+            <div id="template-preview" class="hidden">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Template Parameters</h3>
+                <div id="template-params" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+                <div class="text-center">
+                    <button id="predict-template" class="btn-primary" {% if not models_loaded %}disabled{% endif %}>
+                        <i class="fas fa-search mr-2"></i>Predict with Template
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Random Form -->
+    <div id="random-form" class="input-form hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Random Exoplanet Example</h2>
+            
+            <div class="text-center mb-6">
+                <button id="generate-random" class="btn-secondary">
+                    <i class="fas fa-dice mr-2"></i>Generate Random Example
+                </button>
+            </div>
+            
+            <div id="random-preview" class="hidden">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Generated Parameters</h3>
+                <div id="random-params" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+                <div class="text-center">
+                    <button id="predict-random" class="btn-primary" {% if not models_loaded %}disabled{% endif %}>
+                        <i class="fas fa-search mr-2"></i>Predict Random Example
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">Prediction Results</h2>
+            
+            <div id="prediction-result"></div>
+            
+            <div id="model-analysis" class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Base Model Analysis</h3>
+                <div id="base-model-details" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+            </div>
+            
+            <div id="architecture-explanation" class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Architecture Flow</h3>
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 transition-colors duration-300">
+                    <div class="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                        <span class="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Raw Features</span>
+                        <i class="fas fa-arrow-right text-blue-500 dark:text-blue-400 transition-colors duration-300"></i>
+                        <span class="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">XGBoost</span>
+                        <i class="fas fa-arrow-right text-blue-500 dark:text-blue-400 transition-colors duration-300"></i>
+                        <span class="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Probability Output</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-300 mt-2 transition-colors duration-300">
+                        <span class="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Raw Features</span>
+                        <i class="fas fa-arrow-right text-green-500 dark:text-green-400 transition-colors duration-300"></i>
+                        <span class="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Random Forest</span>
+                        <i class="fas fa-arrow-right text-green-500 dark:text-green-400 transition-colors duration-300"></i>
+                        <span class="bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Probability Output</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-700 dark:text-gray-300 mt-2 transition-colors duration-300">
+                        <span class="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">[XGBoost, Random Forest]</span>
+                        <i class="fas fa-arrow-right text-purple-500 dark:text-purple-400 transition-colors duration-300"></i>
+                        <span class="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Neural Network</span>
+                        <i class="fas fa-arrow-right text-purple-500 dark:text-purple-400 transition-colors duration-300"></i>
+                        <span class="bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full font-medium transition-colors duration-300">Final Decision</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Hyperparameter Tuning - Exoplanet Detection Platform{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<div class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-black dark:to-gray-800 py-16">
+    <div class="absolute inset-0">
+        <div class="absolute top-20 left-20 w-80 h-80 bg-blue-400/10 dark:bg-blue-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-80 h-80 bg-purple-400/10 dark:bg-purple-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse delay-700"></div>
+        <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-gray-400/5 dark:bg-gray-500/15 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-bounce-subtle"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <div class="inline-flex items-center px-4 py-2 bg-blue-100/90 dark:bg-gray-800/80 backdrop-blur-sm rounded-full mb-6 border border-blue-200/50 dark:border-gray-600/50">
+                <i class="fas fa-cogs text-blue-600 dark:text-blue-400 mr-2"></i>
+                <span class="text-sm font-medium text-blue-800 dark:text-gray-200">Neural Network Tuning</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                Hyperparameter Tuning
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                Experiment with different neural network configurations to optimize exoplanet detection performance
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {% if not models_loaded %}
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8 transition-colors duration-300">
+        <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 text-xl mr-3 transition-colors duration-300"></i>
+            <div>
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 transition-colors duration-300">Models Not Loaded</h3>
+                <p class="text-red-700 dark:text-red-300 transition-colors duration-300">Please check model files and restart the application</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Hyperparameter Configuration -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Configuration Panel -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                <i class="fas fa-sliders-h text-blue-600 mr-2"></i>
+                Neural Network Configuration
+            </h2>
+            
+            <!-- Preset Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Quick Presets</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="preset-conservative" class="preset-btn bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-left transition-colors duration-300">
+                        <div class="font-medium text-gray-900 dark:text-white">Conservative</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">Stable performance</div>
+                    </button>
+                    <button id="preset-aggressive" class="preset-btn bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-left transition-colors duration-300">
+                        <div class="font-medium text-gray-900 dark:text-white">Aggressive</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">High capacity</div>
+                    </button>
+                    <button id="preset-efficient" class="preset-btn bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-left transition-colors duration-300">
+                        <div class="font-medium text-gray-900 dark:text-white">Efficient</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">Fast training</div>
+                    </button>
+                    <button id="preset-balanced" class="preset-btn bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-left transition-colors duration-300">
+                        <div class="font-medium text-gray-900 dark:text-white">Balanced</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">Well-rounded</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hyperparameter Controls -->
+            <form id="hyperparameter-form" class="space-y-6">
+                <!-- Architecture Parameters -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Architecture</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="hidden_layers" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Hidden Layers
+                            </label>
+                            <input type="range" id="hidden_layers" name="hidden_layers" min="2" max="8" value="4" 
+                                   class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>2</span>
+                                <span id="hidden_layers_value" class="font-medium text-blue-600 dark:text-blue-400">4</span>
+                                <span>8</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="neurons_per_layer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Neurons per Layer
+                            </label>
+                            <input type="range" id="neurons_per_layer" name="neurons_per_layer" min="32" max="512" value="128" step="32"
+                                   class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>32</span>
+                                <span id="neurons_per_layer_value" class="font-medium text-blue-600 dark:text-blue-400">128</span>
+                                <span>512</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="dropout_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Dropout Rate
+                        </label>
+                        <input type="range" id="dropout_rate" name="dropout_rate" min="0.0" max="0.8" value="0.3" step="0.05"
+                               class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <span>0.0</span>
+                            <span id="dropout_rate_value" class="font-medium text-blue-600 dark:text-blue-400">0.30</span>
+                            <span>0.8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Parameters -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Training</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="learning_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Learning Rate
+                            </label>
+                            <input type="range" id="learning_rate" name="learning_rate" min="0.0001" max="0.01" value="0.001" step="0.0001"
+                                   class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>0.0001</span>
+                                <span id="learning_rate_value" class="font-medium text-blue-600 dark:text-blue-400">0.001</span>
+                                <span>0.01</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="batch_size" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Batch Size
+                            </label>
+                            <select id="batch_size" name="batch_size" 
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="16">16</option>
+                                <option value="32" selected>32</option>
+                                <option value="64">64</option>
+                                <option value="128">128</option>
+                                <option value="256">256</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="epochs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Epochs
+                        </label>
+                        <input type="range" id="epochs" name="epochs" min="10" max="200" value="50" step="10"
+                               class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <span>10</span>
+                            <span id="epochs_value" class="font-medium text-blue-600 dark:text-blue-400">50</span>
+                            <span>200</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Parameters -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Advanced</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="activation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Activation Function
+                            </label>
+                            <select id="activation" name="activation" 
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="relu" selected>ReLU</option>
+                                <option value="gelu">GELU</option>
+                                <option value="swish">Swish</option>
+                                <option value="leaky_relu">Leaky ReLU</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="optimizer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Optimizer
+                            </label>
+                            <select id="optimizer" name="optimizer" 
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="adam" selected>Adam</option>
+                                <option value="adamw">AdamW</option>
+                                <option value="sgd">SGD</option>
+                                <option value="rmsprop">RMSprop</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Run Experiment Button -->
+                <div class="pt-4">
+                    <button type="submit" id="run-experiment-btn" 
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Experiment
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                <i class="fas fa-chart-line text-green-600 mr-2"></i>
+                Experiment Results
+            </h2>
+            
+            <div id="experiment-results" class="space-y-6">
+                <!-- Default State -->
+                <div class="text-center py-12">
+                    <i class="fas fa-flask text-gray-400 text-4xl mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Ready for Experiment</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Configure your hyperparameters and run an experiment to see results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+            Hyperparameter Guide
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Architecture</h3>
+                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <p><strong>Hidden Layers:</strong> More layers = higher capacity, but risk of overfitting</p>
+                    <p><strong>Neurons:</strong> More neurons = better learning, but slower training</p>
+                    <p><strong>Dropout:</strong> Prevents overfitting by randomly setting neurons to 0</p>
+                </div>
+            </div>
+            
+            <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Training</h3>
+                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <p><strong>Learning Rate:</strong> Higher = faster learning, but may overshoot optimal</p>
+                    <p><strong>Batch Size:</strong> Larger = stable gradients, but more memory</p>
+                    <p><strong>Epochs:</strong> More = better convergence, but risk of overfitting</p>
+                </div>
+            </div>
+            
+            <div class="space-y-3">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Advanced</h3>
+                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <p><strong>Activation:</strong> GELU often performs better than ReLU</p>
+                    <p><strong>Optimizer:</strong> AdamW often outperforms Adam with weight decay</p>
+                    <p><strong>Experiment:</strong> Try different combinations to find optimal settings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/hyperparameters.js"></script>
+{% endblock %}

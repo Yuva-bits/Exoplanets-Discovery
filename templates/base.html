@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Exoplanet Detection Platform{% endblock %}</title>
+    
+    <!-- Google Fonts - Glacial Indifference -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Modern CSS Framework -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: {
+                    'sans': ['Glacial Indifference', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    'glacial': ['Glacial Indifference', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    'inter': ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                },
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        gray: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-subtle': 'bounceSubtle 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' }
+                        }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+                        'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                        'strong': '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 4px 25px -5px rgba(0, 0, 0, 0.1)',
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/cosmic.css') }}" rel="stylesheet">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
+    <!-- Enhanced Modern Navigation -->
+    <nav class="glass-nav dark:glass-nav-dark transition-all duration-300 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo Section -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="{{ url_for('home') }}" class="flex items-center space-x-3 group">
+                            <div class="relative w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-glow transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                                <i class="fas fa-star text-white text-sm group-hover:animate-pulse"></i>
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                            </div>
+                            <span class="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                                ExoplanetAI
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{{ url_for('home') }}" class="nav-link-enhanced {% if request.endpoint == 'home' %}active{% endif %}">
+                        <i class="fas fa-home text-sm"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="{{ url_for('predict_page') }}" class="nav-link-enhanced {% if request.endpoint == 'predict_page' %}active{% endif %}">
+                        <i class="fas fa-search text-sm"></i>
+                        <span>Predict</span>
+                    </a>
+                    <a href="{{ url_for('batch_page') }}" class="nav-link-enhanced {% if request.endpoint == 'batch_page' %}active{% endif %}">
+                        <i class="fas fa-upload text-sm"></i>
+                        <span>Batch</span>
+                    </a>
+                    <a href="{{ url_for('statistics_page') }}" class="nav-link-enhanced {% if request.endpoint == 'statistics_page' %}active{% endif %}">
+                        <i class="fas fa-chart-bar text-sm"></i>
+                        <span>Statistics</span>
+                    </a>
+                    <a href="{{ url_for('hyperparameters_page') }}" class="nav-link-enhanced {% if request.endpoint == 'hyperparameters_page' %}active{% endif %}">
+                        <i class="fas fa-cogs text-sm"></i>
+                        <span>Tuning</span>
+                    </a>
+                    <a href="{{ url_for('learn_page') }}" class="nav-link-enhanced {% if request.endpoint == 'learn_page' %}active{% endif %}">
+                        <i class="fas fa-graduation-cap text-sm"></i>
+                        <span>Learn</span>
+                    </a>
+                    
+                    <!-- Enhanced Dark Theme Toggle -->
+                    <button id="theme-toggle" class="ml-4 p-3 rounded-xl bg-gray-100/70 hover:bg-gray-200/80 dark:bg-gray-800/70 dark:hover:bg-gray-700/80 backdrop-blur-sm border border-gray-200/40 dark:border-gray-600/40 transition-all duration-300 hover:scale-110 hover:shadow-medium group">
+                        <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-white text-sm group-hover:rotate-12 transition-all duration-300"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <button id="theme-toggle" class="p-2.5 rounded-xl bg-gray-100/70 hover:bg-gray-200/80 dark:bg-gray-800/70 dark:hover:bg-gray-700/80 backdrop-blur-sm border border-gray-200/40 dark:border-gray-600/40 transition-all duration-300">
+                        <i id="theme-icon-mobile" class="fas fa-moon text-gray-700 dark:text-white text-sm"></i>
+                    </button>
+                    <button class="p-2.5 rounded-xl bg-gray-100/70 hover:bg-gray-200/80 dark:bg-gray-800/70 dark:hover:bg-gray-700/80 backdrop-blur-sm border border-gray-200/40 dark:border-gray-600/40 transition-all duration-300">
+                        <i class="fas fa-bars text-gray-700 dark:text-white text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-star text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold">ExoplanetAI</span>
+                    </div>
+                    <p class="text-gray-400">Advanced exoplanet detection platform using hierarchical ensemble machine learning.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Features</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Single Prediction</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Batch Analysis</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Model Statistics</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hyperparameter Tuning</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Educational Content</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Technology</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-robot text-blue-500 mr-2"></i>XGBoost</li>
+                        <li><i class="fas fa-robot text-blue-500 mr-2"></i>Random Forest</li>
+                        <li><i class="fas fa-robot text-blue-500 mr-2"></i>Neural Networks</li>
+                        <li><i class="fas fa-robot text-blue-500 mr-2"></i>Hierarchical Ensemble</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 NASA Space Apps Challenge - Exoplanet Detection Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

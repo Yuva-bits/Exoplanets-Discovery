@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Test - Exoplanet Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/cosmic.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-8">Dark Mode Visibility Test</h1>
+        
+        <div class="bg-gray-800/90 rounded-xl p-8 mb-8 border border-gray-600/50">
+            <h2 class="text-xl font-bold mb-4">Form Input Test</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-200 mb-2">Test Input Field</label>
+                    <input type="number" class="form-input" value="123" placeholder="Enter a number">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-200 mb-2">Enhanced Input Field</label>
+                    <input type="text" class="form-input-enhanced" value="Test text" placeholder="Enter text">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-200 mb-2">Standard HTML Input</label>
+                    <input type="email" 
+                           style="background-color: rgba(17, 24, 39, 0.95) !important; border-color: rgba(75, 85, 99, 0.8) !important; color: #f9fafb !important; padding: 12px; border-radius: 8px; width: 100%;" 
+                           value="test@example.com" 
+                           placeholder="Enter email">
+                </div>
+            </div>
+            
+            <button class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium">
+                Test Button
+            </button>
+        </div>
+        
+        <div class="text-gray-300">
+            <p>✓ Labels should be clearly visible in light gray/white</p>
+            <p>✓ Input fields should have dark backgrounds with light text</p>
+            <p>✓ Borders should be visible but not too bright</p>
+            <p>✓ Button should be clearly visible with good contrast</p>
+        </div>
+    </div>
+</body>
+</html>

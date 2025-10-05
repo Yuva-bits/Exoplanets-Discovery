@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - Exoplanet Detection Platform{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50">
+    <div class="max-w-md w-full text-center">
+        <div class="mb-8">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-red-100 rounded-full mb-6">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-600"></i>
+            </div>
+            <h1 class="text-6xl font-bold text-gray-900 mb-4">404</h1>
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Page Not Found</h2>
+            <p class="text-gray-600 mb-8">
+                The page you're looking for doesn't exist or has been moved.
+            </p>
+        </div>
+        
+        <div class="space-y-4">
+            <a href="{{ url_for('home') }}" class="btn-primary inline-block">
+                <i class="fas fa-home mr-2"></i>Go Home
+            </a>
+            <div class="text-sm text-gray-500">
+                or try one of these pages:
+            </div>
+            <div class="flex flex-wrap justify-center gap-2">
+                <a href="{{ url_for('predict_page') }}" class="text-blue-600 hover:text-blue-700 text-sm">
+                    <i class="fas fa-search mr-1"></i>Predict
+                </a>
+                <span class="text-gray-400">•</span>
+                <a href="{{ url_for('batch_page') }}" class="text-blue-600 hover:text-blue-700 text-sm">
+                    <i class="fas fa-upload mr-1"></i>Batch
+                </a>
+                <span class="text-gray-400">•</span>
+                <a href="{{ url_for('statistics_page') }}" class="text-blue-600 hover:text-blue-700 text-sm">
+                    <i class="fas fa-chart-bar mr-1"></i>Statistics
+                </a>
+                <span class="text-gray-400">•</span>
+                <a href="{{ url_for('learn_page') }}" class="text-blue-600 hover:text-blue-700 text-sm">
+                    <i class="fas fa-graduation-cap mr-1"></i>Learn
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

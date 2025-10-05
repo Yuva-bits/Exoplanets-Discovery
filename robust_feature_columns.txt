@@ -1,0 +1,14 @@
+koi_period
+koi_time0bk
+koi_impact
+koi_duration
+koi_depth
+koi_prad
+koi_teq
+koi_insol
+koi_slogg
+koi_slogg_err1
+koi_slogg_err2
+koi_srad
+koi_srad_err1
+koi_srad_err2
